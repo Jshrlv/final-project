@@ -1,46 +1,26 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import FormPage from "./pages/FormPage";
 
 function App() {
-  const [message, setMessage] = useState("Loading...");
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const healthRes = await fetch("/api/health");
-        const healthData = await healthRes.json();
-        setMessage(healthData.message);
-
-        const usersRes = await fetch("/api/users");
-        const usersData = await usersRes.json();
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Fetch failed:", error);
-        setMessage("Failed to connect to API");
-      }
-    }
-
-    fetchData();
-  }, []);
-
   return (
-    <main style={{ fontFamily: "Arial, sans-serif", padding: "2rem" }}>
-      <h1>React + API + Database</h1>
-      <p>{message}</p>
+    <BrowserRouter>
+      <div style={{ fontFamily: "Arial, sans-serif" }}>
+        
+        {/* Navigation */}
+        <nav style={{ padding: "1rem", background: "#f5f5f5" }}>
+          <Link to="/" style={{ marginRight: "1rem" }}>Home</Link>
+          <Link to="/form">Form</Link>
+        </nav>
 
-      <h2>Users from database</h2>
-      {users.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              {user.name} ({user.email})
-            </li>
-          ))}
-        </ul>
-      )}
-    </main>
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/form" element={<FormPage />} />
+        </Routes>
+
+      </div>
+    </BrowserRouter>
   );
 }
 
